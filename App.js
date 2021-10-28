@@ -7,40 +7,95 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, Dimensions} from 'react-native';
 
 import YouTube from 'react-native-youtube';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const width = Dimensions.get('window').width;
 
 const App = () => {
+  const [play, setPlay] = useState(false);
+  const [fullScreen, setFullScreen] = useState(false);
+
   return (
-    <View>
+    <View style={styles.container}>
       <YouTube
         videoId="KVZ-P-ZI6W4" // The YouTube video ID
         apiKey="AIzaSyB3elTHGudf-LMfJJcBEAg316JdXKCZqaE"
-        play // control playback of video with true/false
-        fullscreen={false} // control whether the video should play in fullscreen or inline
-        loop // control whether the video should loop when ended
-        // onReady={e => this.setState({isReady: true})}
-        // onChangeState={e => this.setState({status: e.state})}
-        // onChangeQuality={e => this.setState({quality: e.quality})}
-        // onError={e => this.setState({error: e.error})}
-        style={{alignSelf: 'stretch', height: 300}}
+        play={play}
+        fullscreen={fullScreen}
+        loop
+        style={styles.video}
+        controls={2}
       />
-      <View style={styles.hide} />
+      <View style={styles.row}>
+        <AntDesign
+          name={play ? 'pausecircle' : 'play'}
+          color={'red'}
+          size={25}
+          onPress={() => setPlay(!play)}
+        />
+
+        <MaterialCommunityIcon
+          name={'fullscreen'}
+          color={'red'}
+          size={25}
+          onPress={() => setFullScreen(!fullScreen)}
+        />
+      </View>
+      {fullScreen && (
+        <View style={styles.fullScreenRow}>
+        <AntDesign
+          name={play ? 'pausecircle' : 'play'}
+          color={'red'}
+          size={25}
+          onPress={() => setPlay(!play)}
+        />
+
+        <MaterialCommunityIcon
+          name={'fullscreen'}
+          color={'red'}
+          size={25}
+          onPress={() => setFullScreen(!fullScreen)}
+        />
+      </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexGrow: 1,
+  },
   hide: {
     backgroundColor: 'red',
     height: 100,
     width: width,
     zIndex: -1,
-    position: 'absolute'
+    position: 'absolute',
+  },
+  video: {
+    height: 300,
+  },
+  fullScreen: {
+    height: width - 100,
+  },
+  row: {
+    margin: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  fullScreenRow: {
+    marginHorizontal: 20,
+    marginTop: -100,
+    position: 'absolute',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
